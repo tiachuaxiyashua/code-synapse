@@ -67,3 +67,18 @@
 - 一期快捷实现均有清晰替换点，但没有为替换点预建抽象层。
 
 任一项不满足则扩展性评审不通过，即使页面能运行也不能进入下一阶段。
+
+## 5. 一期实现后复审（2026-07-14）
+
+| 判据 | 实现证据 | 结论 |
+| --- | --- | --- |
+| UI 不导入 CodeGraph schema/SQLite | 浏览器只导入 `prototype/src/generated/semantic-zoom-model.json` | 通过 |
+| 语义对象没有 Express/TypeScript 专属必填字段 | 核心对象只使用 capability/use-case/step/decision/result/event、parent 和 evidence；框架名只存在具体样例内容 | 通过 |
+| 证据路径为仓库相对路径 | 提取器与 validator 都拒绝绝对路径和 `..`，测试覆盖 | 通过 |
+| band 通过 semantic ID/parent 对应 | `projection.js` 按 stable ID、parentId 和 summaryOf 映射，不按文案匹配 | 通过 |
+| 相机不依赖节点类型 | `camera.js` 只处理 x/y/scale/band | 通过 |
+| 源码抽屉只消费 evidence contract | `SourceDrawer` 读取发布 artifact 的 evidence ID、path、line、excerpt | 通过 |
+| 新图种可使用独立入口 | Vite 已用独立 `semantic-zoom.html` 入口，旧原型坐标空间未被修改 | 通过 |
+| 快捷实现有替换点但未预建抽象 | 固定 SQLite extractor、AI 文件 prompt、手工 projection 坐标均局限在 experiment；没有 provider/layout 工厂 | 通过 |
+
+实现后复审结论：**通过一期扩展性门禁**。这只证明模块边界没有阻塞后续扩展，不证明后续语言、图语法或大项目性能已经可用。生产阶段应替换固定 schema extractor、AI 手工运行和静态 projection 生成，但保持 EvidencePack、semantic ID、projection 与独立页面边界。

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rename, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -26,6 +26,8 @@ test("clones a pinned repository once and reuses the checkout", async () => {
 
   assert.equal(ensureCheckout({ repository: source, commit, destination: checkout }).action, "cloned");
   assert.equal(git(checkout, "rev-parse", "HEAD"), commit);
+  const unavailableSource = `${source}-offline`;
+  await rename(source, unavailableSource);
   assert.equal(ensureCheckout({ repository: source, commit, destination: checkout }).action, "reused");
 });
 

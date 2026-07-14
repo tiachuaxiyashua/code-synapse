@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,12 +12,13 @@ function run(command, args, options = {}) {
 }
 
 export function ensureCheckout({ repository, commit, destination }) {
-  let action = "reused";
-  if (!existsSync(path.join(destination, ".git"))) {
-    run("git", ["clone", "--no-checkout", repository, destination]);
-    action = "cloned";
+  if (existsSync(path.join(destination, ".git"))) {
+    const currentCommit = run("git", ["rev-parse", "HEAD"], { cwd: destination });
+    if (currentCommit === commit) return { action: "reused", commit: currentCommit };
   }
 
+  const action = existsSync(path.join(destination, ".git")) ? "updated" : "cloned";
+  if (action === "cloned") run("git", ["clone", "--no-checkout", repository, destination]);
   run("git", ["fetch", "--depth", "1", "origin", commit], { cwd: destination });
   run("git", ["checkout", "--detach", "--force", commit], { cwd: destination });
   const actualCommit = run("git", ["rev-parse", "HEAD"], { cwd: destination });
@@ -39,7 +41,7 @@ function installCodeGraph(version, toolsRoot) {
 }
 
 function main() {
-  const manifest = JSON.parse(run("node", ["-e", `process.stdout.write(JSON.stringify(require(${JSON.stringify(path.join(EXPERIMENT_ROOT, "manifest.json"))})))`]));
+  const manifest = JSON.parse(readFileSync(path.join(EXPERIMENT_ROOT, "manifest.json"), "utf8"));
   const destination = path.resolve(REPOSITORY_ROOT, manifest.sample.localPath);
   const checkout = ensureCheckout({ repository: manifest.sample.repository, commit: manifest.sample.commit, destination });
   const toolsRoot = path.join(EXPERIMENT_ROOT, ".tools");

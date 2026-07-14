@@ -39,6 +39,14 @@ npm ci
 npm run dev
 ```
 
+The Phase 1 evidence-backed experience is available at:
+
+```text
+http://127.0.0.1:5173/semantic-zoom.html?view=features
+```
+
+Run its checks with `npm test`, `npm run test:e2e`, and `npm run build` from `prototype/`.
+
 ## Development Principles
 
 - Every functional claim shown to a user must link to source or analyzer evidence.
