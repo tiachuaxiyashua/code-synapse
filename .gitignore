@@ -1,0 +1,30 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.superpowers/
+
+# Dependencies and generated web output
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Downloaded repositories and analyzer artifacts
+storage/
+experiments/graph-foundation/samples/
+experiments/graph-foundation/work/
+experiments/graph-foundation/results/*/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+.codegraph/
+.code_synapse/
+
+# Phase-one local inputs and generated artifacts
+experiments/semantic-zoom-feasibility/sample/
+experiments/semantic-zoom-feasibility/generated/
+prototype/src/generated/

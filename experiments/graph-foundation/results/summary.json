@@ -1,0 +1,1139 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-13T18:14:03.310Z",
+  "providerCommits": {
+    "codegraph": "e871c49a3173a637172f501f21f6a2753ea5a39f",
+    "codewiki": "7be8f702504cbd69aec6491a2e4e81f5311e0ba6",
+    "understandAnything": "fbc1b8208adb0b3aa331183a05ec02f115f586ef"
+  },
+  "samples": {
+    "bulletproof-nodejs": {
+      "profile": "TypeScript Express web API",
+      "primaryLanguages": [
+        "typescript",
+        "javascript"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 2.826,
+        "artifactBytes": 438272,
+        "exportedJsonBytes": 284365,
+        "entityCount": 147,
+        "relationCount": 548,
+        "primaryFileCount": 28,
+        "representedPrimaryFiles": 28,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 25,
+        "structuralFileCoverage": 0.8929,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 3,
+        "resolvedCallRecall": 0.6,
+        "resolvedCallFacts": 8,
+        "resolvedCallFactRate": 0.041,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 1.606,
+        "artifactBytes": 585728,
+        "exportedJsonBytes": 271187,
+        "entityCount": 92,
+        "relationCount": 324,
+        "primaryFileCount": 28,
+        "representedPrimaryFiles": 28,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 11,
+        "structuralFileCoverage": 0.3929,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 3,
+        "resolvedCallRecall": 0.6,
+        "resolvedCallFacts": 9,
+        "resolvedCallFactRate": 0.0989,
+        "callLocationPrecision": 0,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 0.369,
+        "artifactBytes": 29623,
+        "exportedJsonBytes": 29623,
+        "entityCount": 63,
+        "relationCount": 70,
+        "primaryFileCount": 28,
+        "representedPrimaryFiles": 28,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 8,
+        "structuralFileCoverage": 0.2857,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 0.4,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": 0,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 94,
+        "overlappingEntities": 61,
+        "entityProviderOverlap": 0.6489,
+        "callIdentityUnion": 83,
+        "overlappingCalls": 52,
+        "callProviderOverlap": 0.6265,
+        "conflicts": 0,
+        "providerConflictRate": 0
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 192,
+          "overlappingEntities": 47,
+          "entityProviderOverlap": 0.2448,
+          "callIdentityUnion": 160,
+          "overlappingCalls": 50,
+          "callProviderOverlap": 0.3125,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 164,
+          "overlappingEntities": 46,
+          "entityProviderOverlap": 0.2805,
+          "callIdentityUnion": 131,
+          "overlappingCalls": 50,
+          "callProviderOverlap": 0.3817,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        }
+      }
+    },
+    "click": {
+      "profile": "Python command-line framework",
+      "primaryLanguages": [
+        "python"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 3.685,
+        "artifactBytes": 6455296,
+        "exportedJsonBytes": 5246716,
+        "entityCount": 2664,
+        "relationCount": 10576,
+        "primaryFileCount": 76,
+        "representedPrimaryFiles": 76,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 73,
+        "structuralFileCoverage": 0.9605,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 5,
+        "resolvedCallRecall": 1,
+        "resolvedCallFacts": 1602,
+        "resolvedCallFactRate": 0.2723,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 239,
+        "duplicateFactRate": 0.0897,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 3.555,
+        "artifactBytes": 10489856,
+        "exportedJsonBytes": 8560272,
+        "entityCount": 1699,
+        "relationCount": 14693,
+        "primaryFileCount": 76,
+        "representedPrimaryFiles": 76,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 72,
+        "structuralFileCoverage": 0.9474,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 2,
+        "resolvedCallRecall": 0.4,
+        "resolvedCallFacts": 2170,
+        "resolvedCallFactRate": 0.2634,
+        "callLocationPrecision": 0,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 0.841,
+        "artifactBytes": 1082984,
+        "exportedJsonBytes": 1082984,
+        "entityCount": 1423,
+        "relationCount": 5481,
+        "primaryFileCount": 76,
+        "representedPrimaryFiles": 76,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 72,
+        "structuralFileCoverage": 0.9474,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 0.6,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": 0,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 36,
+        "duplicateFactRate": 0.0253,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 1703,
+        "overlappingEntities": 1383,
+        "entityProviderOverlap": 0.8121,
+        "callIdentityUnion": 6023,
+        "overlappingCalls": 3826,
+        "callProviderOverlap": 0.6352,
+        "conflicts": 0,
+        "providerConflictRate": 0
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 2810,
+          "overlappingEntities": 1314,
+          "entityProviderOverlap": 0.4676,
+          "callIdentityUnion": 6187,
+          "overlappingCalls": 3583,
+          "callProviderOverlap": 0.5791,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 2504,
+          "overlappingEntities": 1308,
+          "entityProviderOverlap": 0.5224,
+          "callIdentityUnion": 4116,
+          "overlappingCalls": 3687,
+          "callProviderOverlap": 0.8958,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        }
+      }
+    },
+    "freertos-kernel": {
+      "profile": "embedded real-time operating-system kernel",
+      "primaryLanguages": [
+        "c"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 11.657,
+        "artifactBytes": 32018432,
+        "exportedJsonBytes": 18390412,
+        "entityCount": 10005,
+        "relationCount": 27739,
+        "primaryFileCount": 655,
+        "representedPrimaryFiles": 655,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 587,
+        "structuralFileCoverage": 0.8962,
+        "symbolTruthCount": 4,
+        "symbolMatches": 4,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 4,
+        "callMatches": 4,
+        "callRecall": 1,
+        "resolvedCallMatches": 3,
+        "resolvedCallRecall": 0.75,
+        "resolvedCallFacts": 3654,
+        "resolvedCallFactRate": 0.2495,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 360,
+        "duplicateFactRate": 0.036,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 7.753,
+        "artifactBytes": 30822400,
+        "exportedJsonBytes": 23927381,
+        "entityCount": 6713,
+        "relationCount": 29319,
+        "primaryFileCount": 655,
+        "representedPrimaryFiles": 655,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 377,
+        "structuralFileCoverage": 0.5756,
+        "symbolTruthCount": 4,
+        "symbolMatches": 4,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 4,
+        "callMatches": 4,
+        "callRecall": 1,
+        "resolvedCallMatches": 3,
+        "resolvedCallRecall": 0.75,
+        "resolvedCallFacts": 1827,
+        "resolvedCallFactRate": 0.1938,
+        "callLocationPrecision": 0,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 3.657,
+        "artifactBytes": 2072459,
+        "exportedJsonBytes": 2072459,
+        "entityCount": 2389,
+        "relationCount": 10153,
+        "primaryFileCount": 655,
+        "representedPrimaryFiles": 655,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 241,
+        "structuralFileCoverage": 0.3679,
+        "symbolTruthCount": 4,
+        "symbolMatches": 0,
+        "symbolRecall": 0,
+        "symbolLocationPrecision": null,
+        "callTruthCount": 4,
+        "callMatches": 4,
+        "callRecall": 1,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": 0,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "function",
+              "file": "tasks.c",
+              "name": "xTaskCreate",
+              "line": 1745
+            },
+            {
+              "kind": "function",
+              "file": "tasks.c",
+              "name": "vTaskDelay",
+              "line": 2473
+            },
+            {
+              "kind": "function",
+              "file": "tasks.c",
+              "name": "xTaskIncrementTick",
+              "line": 4745
+            },
+            {
+              "kind": "function",
+              "file": "tasks.c",
+              "name": "prvAddCurrentTaskToDelayedList",
+              "line": 8601
+            }
+          ],
+          "calls": []
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 6731,
+        "overlappingEntities": 2371,
+        "entityProviderOverlap": 0.3523,
+        "callIdentityUnion": 7804,
+        "overlappingCalls": 7406,
+        "callProviderOverlap": 0.949,
+        "conflicts": 0,
+        "providerConflictRate": 0
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 10652,
+          "overlappingEntities": 5706,
+          "entityProviderOverlap": 0.5357,
+          "callIdentityUnion": 10757,
+          "overlappingCalls": 7495,
+          "callProviderOverlap": 0.6968,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 9900,
+          "overlappingEntities": 2134,
+          "entityProviderOverlap": 0.2156,
+          "callIdentityUnion": 10815,
+          "overlappingCalls": 7447,
+          "callProviderOverlap": 0.6886,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        }
+      }
+    },
+    "etl": {
+      "profile": "embedded C++ template library",
+      "primaryLanguages": [
+        "cpp"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 54.742,
+        "artifactBytes": 187949056,
+        "exportedJsonBytes": 152955077,
+        "entityCount": 44343,
+        "relationCount": 352411,
+        "primaryFileCount": 1220,
+        "representedPrimaryFiles": 1220,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 1135,
+        "structuralFileCoverage": 0.9303,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 5,
+        "resolvedCallRecall": 1,
+        "resolvedCallFacts": 80255,
+        "resolvedCallFactRate": 0.291,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 21414,
+        "duplicateFactRate": 0.4829,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 35.292,
+        "artifactBytes": 22798336,
+        "exportedJsonBytes": 19160045,
+        "entityCount": 6601,
+        "relationCount": 28503,
+        "primaryFileCount": 1220,
+        "representedPrimaryFiles": 1220,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 639,
+        "structuralFileCoverage": 0.5238,
+        "symbolTruthCount": 5,
+        "symbolMatches": 3,
+        "symbolRecall": 0.6,
+        "symbolLocationPrecision": 0.3333,
+        "callTruthCount": 5,
+        "callMatches": 1,
+        "callRecall": 0.2,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 2003,
+        "resolvedCallFactRate": 0.1606,
+        "callLocationPrecision": 0,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "include/etl/message_bus.h",
+              "name": "imessage_bus",
+              "line": 76
+            },
+            {
+              "kind": "class",
+              "file": "include/etl/message_bus.h",
+              "name": "message_bus",
+              "line": 409
+            }
+          ],
+          "calls": [
+            {
+              "file": "include/etl/message_bus.h",
+              "caller": "subscribe",
+              "callee": "is_consumer",
+              "line": 94
+            },
+            {
+              "file": "include/etl/message_bus.h",
+              "caller": "subscribe",
+              "callee": "insert",
+              "line": 105
+            },
+            {
+              "file": "include/etl/message_bus.h",
+              "caller": "receive",
+              "callee": "accepts",
+              "line": 169
+            },
+            {
+              "file": "include/etl/message_bus.h",
+              "caller": "receive",
+              "callee": "receive",
+              "line": 171
+            }
+          ]
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 8.291,
+        "artifactBytes": 32543691,
+        "exportedJsonBytes": 32543691,
+        "entityCount": 5067,
+        "relationCount": 274364,
+        "primaryFileCount": 1220,
+        "representedPrimaryFiles": 1220,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 385,
+        "structuralFileCoverage": 0.3156,
+        "symbolTruthCount": 5,
+        "symbolMatches": 0,
+        "symbolRecall": 0,
+        "symbolLocationPrecision": null,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": 0,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 711,
+        "duplicateFactRate": 0.1403,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "include/etl/message_bus.h",
+              "name": "imessage_bus",
+              "line": 76
+            },
+            {
+              "kind": "function",
+              "file": "include/etl/message_bus.h",
+              "name": "subscribe",
+              "line": 89
+            },
+            {
+              "kind": "function",
+              "file": "include/etl/message_bus.h",
+              "name": "unsubscribe",
+              "line": 115
+            },
+            {
+              "kind": "function",
+              "file": "include/etl/message_bus.h",
+              "name": "receive",
+              "line": 142
+            },
+            {
+              "kind": "class",
+              "file": "include/etl/message_bus.h",
+              "name": "message_bus",
+              "line": 409
+            }
+          ],
+          "calls": []
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 7928,
+        "overlappingEntities": 3029,
+        "entityProviderOverlap": 0.3821,
+        "callIdentityUnion": 22523,
+        "overlappingCalls": 9427,
+        "callProviderOverlap": 0.4185,
+        "conflicts": 15,
+        "providerConflictRate": 0.0019
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 26598,
+          "overlappingEntities": 2932,
+          "entityProviderOverlap": 0.1102,
+          "callIdentityUnion": 21269,
+          "overlappingCalls": 9175,
+          "callProviderOverlap": 0.4314,
+          "conflicts": 38,
+          "providerConflictRate": 0.0014
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 24349,
+          "overlappingEntities": 2936,
+          "entityProviderOverlap": 0.1206,
+          "callIdentityUnion": 25186,
+          "overlappingCalls": 16270,
+          "callProviderOverlap": 0.646,
+          "conflicts": 2,
+          "providerConflictRate": 0.0001
+        }
+      }
+    },
+    "clean-architecture": {
+      "profile": "ASP.NET Clean Architecture application",
+      "primaryLanguages": [
+        "csharp"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 1.517,
+        "artifactBytes": 3227648,
+        "exportedJsonBytes": 2388910,
+        "entityCount": 1279,
+        "relationCount": 3956,
+        "primaryFileCount": 110,
+        "representedPrimaryFiles": 110,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 110,
+        "structuralFileCoverage": 1,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 2,
+        "resolvedCallRecall": 0.4,
+        "resolvedCallFacts": 263,
+        "resolvedCallFactRate": 0.2058,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 9,
+        "duplicateFactRate": 0.007,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 6.138,
+        "artifactBytes": 3465216,
+        "exportedJsonBytes": 2354383,
+        "entityCount": 811,
+        "relationCount": 2879,
+        "primaryFileCount": 110,
+        "representedPrimaryFiles": 110,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 101,
+        "structuralFileCoverage": 0.9182,
+        "symbolTruthCount": 5,
+        "symbolMatches": 4,
+        "symbolRecall": 0.8,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 1,
+        "resolvedCallRecall": 0.2,
+        "resolvedCallFacts": 193,
+        "resolvedCallFactRate": 0.16,
+        "callLocationPrecision": 0,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "src/Application/TodoItems/Commands/CreateTodoItem/CreateTodoItem.cs",
+              "name": "CreateTodoItemCommand",
+              "line": 6
+            }
+          ],
+          "calls": []
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 0.484,
+        "artifactBytes": 408119,
+        "exportedJsonBytes": 408119,
+        "entityCount": 898,
+        "relationCount": 1240,
+        "primaryFileCount": 110,
+        "representedPrimaryFiles": 110,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 100,
+        "structuralFileCoverage": 0.9091,
+        "symbolTruthCount": 5,
+        "symbolMatches": 5,
+        "symbolRecall": 1,
+        "symbolLocationPrecision": 1,
+        "callTruthCount": 5,
+        "callMatches": 5,
+        "callRecall": 1,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": 0,
+        "callLocationPrecision": 1,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 14,
+        "duplicateFactRate": 0.0156,
+        "supportStatus": "structural-facts-produced",
+        "misses": {
+          "symbols": [],
+          "calls": []
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 1043,
+        "overlappingEntities": 652,
+        "entityProviderOverlap": 0.6251,
+        "callIdentityUnion": 1190,
+        "overlappingCalls": 865,
+        "callProviderOverlap": 0.7269,
+        "conflicts": 0,
+        "providerConflictRate": 0
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 1841,
+          "overlappingEntities": 240,
+          "entityProviderOverlap": 0.1304,
+          "callIdentityUnion": 1229,
+          "overlappingCalls": 796,
+          "callProviderOverlap": 0.6477,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 1914,
+          "overlappingEntities": 240,
+          "entityProviderOverlap": 0.1254,
+          "callIdentityUnion": 1228,
+          "overlappingCalls": 826,
+          "callProviderOverlap": 0.6726,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        }
+      }
+    },
+    "godot-demo-projects": {
+      "profile": "Godot game using GDScript and scene metadata",
+      "primaryLanguages": [
+        "gdscript"
+      ],
+      "codegraph": {
+        "executionSuccess": true,
+        "runtimeSeconds": 1.045,
+        "artifactBytes": 155648,
+        "exportedJsonBytes": 204,
+        "entityCount": 0,
+        "relationCount": 0,
+        "primaryFileCount": 10,
+        "representedPrimaryFiles": 0,
+        "fileCoverage": 0,
+        "structuralPrimaryFiles": 0,
+        "structuralFileCoverage": 0,
+        "symbolTruthCount": 5,
+        "symbolMatches": 0,
+        "symbolRecall": 0,
+        "symbolLocationPrecision": null,
+        "callTruthCount": 5,
+        "callMatches": 0,
+        "callRecall": 0,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": null,
+        "callLocationPrecision": null,
+        "danglingRelations": 0,
+        "danglingRelationRate": null,
+        "duplicateFacts": 0,
+        "duplicateFactRate": null,
+        "supportStatus": "no-structural-facts",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "2d/platformer/player/player.gd",
+              "name": "Player",
+              "line": 1
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "_physics_process",
+              "line": 28
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "get_new_animation",
+              "line": 62
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "try_jump",
+              "line": 79
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/gun.gd",
+              "name": "shoot",
+              "line": 14
+            }
+          ],
+          "calls": [
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "try_jump",
+              "line": 32
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "shoot",
+              "line": 53
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "get_new_animation",
+              "line": 55
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "try_jump",
+              "callee": "play",
+              "line": 89
+            },
+            {
+              "file": "2d/platformer/player/gun.gd",
+              "caller": "shoot",
+              "callee": "add_child",
+              "line": 22
+            }
+          ]
+        }
+      },
+      "codewiki": {
+        "executionSuccess": true,
+        "runtimeSeconds": 1.025,
+        "artifactBytes": 462848,
+        "exportedJsonBytes": 161296,
+        "entityCount": 100,
+        "relationCount": 99,
+        "primaryFileCount": 10,
+        "representedPrimaryFiles": 10,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 0,
+        "structuralFileCoverage": 0,
+        "symbolTruthCount": 5,
+        "symbolMatches": 0,
+        "symbolRecall": 0,
+        "symbolLocationPrecision": null,
+        "callTruthCount": 5,
+        "callMatches": 0,
+        "callRecall": 0,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": null,
+        "callLocationPrecision": null,
+        "danglingRelations": 0,
+        "danglingRelationRate": 0,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "no-structural-facts",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "2d/platformer/player/player.gd",
+              "name": "Player",
+              "line": 1
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "_physics_process",
+              "line": 28
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "get_new_animation",
+              "line": 62
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "try_jump",
+              "line": 79
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/gun.gd",
+              "name": "shoot",
+              "line": 14
+            }
+          ],
+          "calls": [
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "try_jump",
+              "line": 32
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "shoot",
+              "line": 53
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "get_new_animation",
+              "line": 55
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "try_jump",
+              "callee": "play",
+              "line": 89
+            },
+            {
+              "file": "2d/platformer/player/gun.gd",
+              "caller": "shoot",
+              "callee": "add_child",
+              "line": 22
+            }
+          ]
+        }
+      },
+      "understandAnything": {
+        "executionSuccess": true,
+        "runtimeSeconds": 0.463,
+        "artifactBytes": 26600,
+        "exportedJsonBytes": 26600,
+        "entityCount": 125,
+        "relationCount": 0,
+        "primaryFileCount": 10,
+        "representedPrimaryFiles": 10,
+        "fileCoverage": 1,
+        "structuralPrimaryFiles": 0,
+        "structuralFileCoverage": 0,
+        "symbolTruthCount": 5,
+        "symbolMatches": 0,
+        "symbolRecall": 0,
+        "symbolLocationPrecision": null,
+        "callTruthCount": 5,
+        "callMatches": 0,
+        "callRecall": 0,
+        "resolvedCallMatches": 0,
+        "resolvedCallRecall": 0,
+        "resolvedCallFacts": 0,
+        "resolvedCallFactRate": null,
+        "callLocationPrecision": null,
+        "danglingRelations": 0,
+        "danglingRelationRate": null,
+        "duplicateFacts": 0,
+        "duplicateFactRate": 0,
+        "supportStatus": "no-structural-facts",
+        "misses": {
+          "symbols": [
+            {
+              "kind": "class",
+              "file": "2d/platformer/player/player.gd",
+              "name": "Player",
+              "line": 1
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "_physics_process",
+              "line": 28
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "get_new_animation",
+              "line": 62
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/player.gd",
+              "name": "try_jump",
+              "line": 79
+            },
+            {
+              "kind": "function",
+              "file": "2d/platformer/player/gun.gd",
+              "name": "shoot",
+              "line": 14
+            }
+          ],
+          "calls": [
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "try_jump",
+              "line": 32
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "shoot",
+              "line": 53
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "_physics_process",
+              "callee": "get_new_animation",
+              "line": 55
+            },
+            {
+              "file": "2d/platformer/player/player.gd",
+              "caller": "try_jump",
+              "callee": "play",
+              "line": 89
+            },
+            {
+              "file": "2d/platformer/player/gun.gd",
+              "caller": "shoot",
+              "callee": "add_child",
+              "line": 22
+            }
+          ]
+        }
+      },
+      "combined": {
+        "entityIdentityUnion": 138,
+        "overlappingEntities": 87,
+        "entityProviderOverlap": 0.6304,
+        "callIdentityUnion": 0,
+        "overlappingCalls": 0,
+        "callProviderOverlap": null,
+        "conflicts": 0,
+        "providerConflictRate": 0
+      },
+      "comparisons": {
+        "codegraphCodewiki": {
+          "entityIdentityUnion": 100,
+          "overlappingEntities": 0,
+          "entityProviderOverlap": 0,
+          "callIdentityUnion": 0,
+          "overlappingCalls": 0,
+          "callProviderOverlap": null,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        },
+        "codegraphUnderstandAnything": {
+          "entityIdentityUnion": 125,
+          "overlappingEntities": 0,
+          "entityProviderOverlap": 0,
+          "callIdentityUnion": 0,
+          "overlappingCalls": 0,
+          "callProviderOverlap": null,
+          "conflicts": 0,
+          "providerConflictRate": 0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "declaredBeforeProviderRuns": true,
+  "experiment": "code-synapse-graph-foundation",
+  "providers": {
+    "codegraph": {
+      "repository": "https://github.com/colbymchenry/codegraph.git",
+      "commit": "e871c49a3173a637172f501f21f6a2753ea5a39f",
+      "version": "1.4.1",
+      "mode": "codegraph init <sample>",
+      "llmUsed": false
+    },
+    "codewiki": {
+      "repository": "https://github.com/PorunC/CodeWiki.git",
+      "commit": "7be8f702504cbd69aec6491a2e4e81f5311e0ba6",
+      "version": "0.6.5",
+      "mode": "codewiki lite index --force --json",
+      "llmUsed": false
+    },
+    "understandAnything": {
+      "repository": "https://github.com/Egonex-AI/Understand-Anything.git",
+      "commit": "fbc1b8208adb0b3aa331183a05ec02f115f586ef",
+      "version": "2.9.2",
+      "mode": "skills/understand/extract-structure.mjs",
+      "llmUsed": false
+    }
+  },
+  "samples": [
+    {
+      "id": "bulletproof-nodejs",
+      "repository": "https://github.com/santiq/bulletproof-nodejs.git",
+      "commit": "7ce1b4690c4e96659cb1ed0d367b08b3ab35a24b",
+      "profile": "TypeScript Express web API",
+      "primaryLanguages": ["typescript", "javascript"],
+      "sourceExtensions": [".ts", ".js"]
+    },
+    {
+      "id": "click",
+      "repository": "https://github.com/pallets/click.git",
+      "commit": "b67832c2167e5b0ff6764a8c04a0a9087e697b5a",
+      "profile": "Python command-line framework",
+      "primaryLanguages": ["python"],
+      "sourceExtensions": [".py", ".pyi"]
+    },
+    {
+      "id": "freertos-kernel",
+      "repository": "https://github.com/FreeRTOS/FreeRTOS-Kernel.git",
+      "commit": "9db704cd3bbe4963f9bd3de1f1161ea2cf90768b",
+      "profile": "embedded real-time operating-system kernel",
+      "primaryLanguages": ["c"],
+      "sourceExtensions": [".c", ".h"]
+    },
+    {
+      "id": "etl",
+      "repository": "https://github.com/ETLCPP/etl.git",
+      "commit": "7f290365a9f1b72bf89b4b77ec7dbe39b228bd8e",
+      "profile": "embedded C++ template library",
+      "primaryLanguages": ["cpp"],
+      "sourceExtensions": [".h", ".hpp", ".cpp", ".cc", ".cxx"]
+    },
+    {
+      "id": "clean-architecture",
+      "repository": "https://github.com/jasontaylordev/CleanArchitecture.git",
+      "commit": "43831e20374677b81f93bb08923eff3245b7195f",
+      "profile": "ASP.NET Clean Architecture application",
+      "primaryLanguages": ["csharp"],
+      "sourceExtensions": [".cs"]
+    },
+    {
+      "id": "godot-demo-projects",
+      "repository": "https://github.com/godotengine/godot-demo-projects.git",
+      "commit": "540ef657b792237cf981fa8783f1896715cd699c",
+      "profile": "Godot game using GDScript and scene metadata",
+      "primaryLanguages": ["gdscript"],
+      "sourceExtensions": [".gd"]
+    }
+  ],
+  "metrics": {
+    "executionSuccess": "exit code is zero and a readable artifact is produced",
+    "fileCoverage": "distinct primary-language files represented / primary-language files on disk",
+    "symbolRecall": "matched declared symbol truths / declared symbol truths",
+    "callRecall": "matched declared call truths / declared call truths",
+    "locationPrecision": "matched truths with a file and compatible line location / matched truths",
+    "danglingRelationRate": "relations whose source or target cannot be resolved / all relations",
+    "duplicateFactRate": "provider facts sharing one provider-neutral identity / all imported facts",
+    "providerOverlap": "facts independently emitted by both providers / union of provider-neutral facts",
+    "providerConflictRate": "same identity and fact kind with incompatible values / union of provider-neutral facts",
+    "incrementalScope": "files reported or reprocessed after one controlled source edit",
+    "runtimeSeconds": "wall-clock seconds measured by the same local machine",
+    "artifactBytes": "bytes of persisted provider output excluding dependency installations"
+  },
+  "matchingRules": {
+    "paths": "repository-relative POSIX paths; exact match after removing a leading ./",
+    "symbols": "case-sensitive name and exact file; line must fall within the emitted source range when a range exists",
+    "calls": "case-sensitive caller and callee terminal names in the declared caller file; an emitted source line is checked when available",
+    "unknown": "absence, parser rejection, dynamic ambiguity, or unsupported syntax is recorded as unknown or unsupported, never inferred as success"
+  },
+  "interpretation": {
+    "singleWeightedWinnerScore": false,
+    "reason": "Different foundation risks are not interchangeable; report the metric vector and hard capability gaps.",
+    "gates": [
+      "Artifacts must preserve provider identity and source evidence.",
+      "An unsupported required language is a capability gap, not a zero-node success.",
+      "A combined import must not overwrite disagreements between providers.",
+      "No provider schema may become the Code Synapse canonical schema."
+    ]
+  }
+}

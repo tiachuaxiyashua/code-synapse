@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-07-14",
+  "platform": "macOS arm64",
+  "runtime": {
+    "node": "22.22.3",
+    "pnpm": "10.26.2",
+    "python": "3.12.12"
+  },
+  "codegraph": {
+    "commit": "e871c49a3173a637172f501f21f6a2753ea5a39f",
+    "version": "1.4.1",
+    "license": "MIT",
+    "install": {
+      "command": "npm ci && npm run build",
+      "result": "passed",
+      "dependencyFootprintKiB": 107700,
+      "builtDistFootprintKiB": 59060,
+      "productionTopLevelDependencies": 10
+    },
+    "runtimeNotes": [
+      "The source-built CLI used Node.js 22.22.3 and emitted Node's experimental node:sqlite warning.",
+      "The packaged standalone CLI includes its own runtime; direct library embedding requires Node.js 22.5 or newer.",
+      "npm audit --omit=dev reported one high-severity production finding because the fixed lock resolved picomatch 4.0.3; 4.0.4 is the available fix."
+    ]
+  },
+  "understandAnything": {
+    "commit": "fbc1b8208adb0b3aa331183a05ec02f115f586ef",
+    "install": {
+      "command": "pnpm install --frozen-lockfile",
+      "cacheState": "334 of 338 packages reused from the pnpm store",
+      "dependencyFootprintKiB": 522280,
+      "coreBuild": "passed"
+    }
+  },
+  "codewiki": {
+    "commit": "7be8f702504cbd69aec6491a2e4e81f5311e0ba6",
+    "version": "0.6.5",
+    "install": {
+      "declaredDependencyCount": 115,
+      "environmentFootprintKiBIncludingUvInstaller": 859628,
+      "uvInstallerKiB": 50816,
+      "estimatedDependencyEnvironmentKiBExcludingUvInstaller": 808812,
+      "pipAttempt": {
+        "result": "cancelled after approximately 1492 seconds because package download throughput remained pathological",
+        "notableDependency": "litellm 1.92.0 source distribution took approximately 605 seconds for 15.1 MB"
+      },
+      "uvRetry": {
+        "result": "115 packages installed",
+        "resolutionSeconds": 5.98,
+        "prepareAndBuildSeconds": 68,
+        "installSeconds": 0.437
+      }
+    },
+    "defaultResolution": {
+      "treeSitter": "0.26.0",
+      "result": "TypeScript and unsupported GDScript samples exited normally; Python, C, C++, and C# samples terminated with SIGSEGV",
+      "rawResultsDirectory": "results/<sample>/codewiki-default/"
+    },
+    "rootCauseTest": {
+      "reproducer": "Parse Click examples/imagepipe/imagepipe.py with CodeWiki AstParser and cache disabled",
+      "treeSitter026": "signal exit (shell code 138)",
+      "repositoryLock": "uv.lock pins tree-sitter 0.25.2",
+      "treeSitter0252": "success, 20 symbols",
+      "finalExperimentVersion": "0.25.2"
+    }
+  },
+  "comparabilityNotes": [
+    "Provider runtime measurements are final sequential cold-AST-cache runs.",
+    "CodeGraph databases and JSON exports were rebuilt from empty project-local indexes.",
+    "Understand Anything dependency installation reused the pnpm store, so install elapsed time is not compared.",
+    "CodeWiki final databases were rebuilt from empty project-local indexes.",
+    "Dependency footprints are installed development/runtime trees, not shipped compressed download sizes."
+  ]
+}
