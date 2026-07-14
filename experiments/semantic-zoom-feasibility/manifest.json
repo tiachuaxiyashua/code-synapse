@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "experiment": "phase-1-semantic-flow-poc",
+  "sample": {
+    "id": "bulletproof-nodejs-auth",
+    "repository": "https://github.com/santiq/bulletproof-nodejs.git",
+    "commit": "7ce1b4690c4e96659cb1ed0d367b08b3ab35a24b",
+    "language": "typescript",
+    "explanationLanguage": "zh-CN",
+    "localPath": "experiments/semantic-zoom-feasibility/sample/bulletproof-nodejs"
+  },
+  "codegraph": {
+    "repository": "https://github.com/colbymchenry/codegraph.git",
+    "commit": "e871c49a3173a637172f501f21f6a2753ea5a39f",
+    "version": "1.4.1",
+    "databasePath": ".codegraph/codegraph.db"
+  },
+  "scope": {
+    "paths": [
+      "src/api/routes/auth.ts",
+      "src/services/auth.ts",
+      "src/subscribers/events.ts",
+      "src/subscribers/user.ts"
+    ],
+    "entrySymbols": [
+      "default export in src/api/routes/auth.ts",
+      "AuthService.SignUp",
+      "AuthService.SignIn"
+    ],
+    "requiredFacts": [
+      "signup request reaches AuthService.SignUp",
+      "signup dispatches onUserSignUp",
+      "signin returns user and token when the password is valid",
+      "signin fails when the user does not exist",
+      "signin fails when the password is invalid"
+    ]
+  }
+}

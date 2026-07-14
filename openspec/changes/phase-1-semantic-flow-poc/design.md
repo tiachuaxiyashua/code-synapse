@@ -32,6 +32,8 @@ Alternative rejected: implement canonical storage, multi-language CFG, increment
 
 `evidence.json` separates source/CodeGraph facts from `model.json`; a validator atomically publishes the browser artifact. Files are inspectable, reproducible, and callable by the current AI agent without an API integration.
 
+The phase schema gives result objects an explicit `outcome: success|failure` discriminator and visual relationships an explicit `kind: control|data|event` discriminator. Truth checks use these fields instead of guessing from translated labels.
+
 Alternative deferred: a database-backed service and automatic model-provider abstraction.
 
 ### Keep analyzer, semantics, and projection identities separate

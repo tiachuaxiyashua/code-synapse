@@ -95,6 +95,7 @@ type SemanticObject = {
   input?: string;
   output?: string;
   sideEffect?: string;
+  outcome?: "success" | "failure";
 };
 
 type VisualNode = {
@@ -111,6 +112,7 @@ type VisualEdge = {
   id: string;
   source: string;
   target: string;
+  kind: "control" | "data" | "event";
   label: string;
   evidenceIds: string[];
   condition?: string;
