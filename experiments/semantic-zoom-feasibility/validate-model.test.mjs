@@ -142,3 +142,42 @@ test("rejects a Z0 graph beyond its readability budget", () => {
     }
   }, /Z0 exceeds the 30 node budget/);
 });
+
+test("rejects duplicate semantic relationships inside a band", () => {
+  expectInvalid(({ model }) => {
+    model.flow.bands.Z0.edges.push({
+      ...structuredClone(model.flow.bands.Z0.edges[1]),
+      id: "duplicate-signup-event",
+    });
+  }, /Z0 repeats event relationship signup -> signup-event/);
+});
+
+test("rejects a Z0 overview without the signup error-forward result", () => {
+  expectInvalid(({ model }) => {
+    model.objects["signup-error-forward"] = {
+      id: "signup-error-forward",
+      kind: "result",
+      outcome: "failure",
+      label: "注册错误出口",
+      purpose: "把注册错误交给 Express",
+      why: "统一处理错误",
+      parentId: "signup",
+      evidenceIds: ["ev-failure"],
+    };
+  }, /Z0 is missing signup-error-forward/);
+});
+
+test("rejects a Z0 overview that hides either signin failure reason", () => {
+  expectInvalid(({ model }) => {
+    model.objects["signin-missing"] = {
+      ...structuredClone(model.objects["signin-failure"]),
+      id: "signin-missing",
+    };
+  }, /Z0 is missing signin-missing/);
+  expectInvalid(({ model }) => {
+    model.objects["signin-invalid"] = {
+      ...structuredClone(model.objects["signin-failure"]),
+      id: "signin-invalid",
+    };
+  }, /Z0 is missing signin-invalid/);
+});

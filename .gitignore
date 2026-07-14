@@ -28,4 +28,4 @@ experiments/graph-foundation/results/*/
 experiments/semantic-zoom-feasibility/sample/
 experiments/semantic-zoom-feasibility/generated/
 experiments/semantic-zoom-feasibility/.tools/
-prototype/src/generated/
+prototype/src/generated/*.tmp

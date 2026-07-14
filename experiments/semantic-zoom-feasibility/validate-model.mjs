@@ -76,11 +76,20 @@ function validateBand(name, band, objects, knownEvidence) {
   }
 
   const edgeIds = new Set();
+  const semanticRelationships = new Set();
   for (const edge of band.edges) {
     invariant(typeof edge?.id === "string" && edge.id, `${name} contains an edge without an ID`);
     invariant(!edgeIds.has(edge.id), `duplicate edge ID ${edge.id} in ${name}`);
     invariant(nodeIds.has(edge.source), `${edge.id} sources missing node ${edge.source}`);
     invariant(nodeIds.has(edge.target), `${edge.id} targets missing node ${edge.target}`);
+    const sourceSemanticId = band.nodes.find((node) => node.id === edge.source).semanticId;
+    const targetSemanticId = band.nodes.find((node) => node.id === edge.target).semanticId;
+    const semanticRelationship = `${edge.kind}:${sourceSemanticId}:${targetSemanticId}`;
+    invariant(
+      !semanticRelationships.has(semanticRelationship),
+      `${name} repeats ${edge.kind} relationship ${sourceSemanticId} -> ${targetSemanticId}`,
+    );
+    semanticRelationships.add(semanticRelationship);
     if (edge.kind === "data" || edge.kind === "event") {
       invariant(typeof edge.label === "string" && edge.label.trim(), `${edge.id} ${edge.kind} relationship has an empty label`);
     }
@@ -99,6 +108,18 @@ function validateBand(name, band, objects, knownEvidence) {
     }),
     `${name} is missing the signup event relationship`,
   );
+
+  if (name === "Z0" && objects["signup-error-forward"]) {
+    const errorNode = band.nodes.find((node) => node.semanticId === "signup-error-forward");
+    invariant(errorNode, "Z0 is missing signup-error-forward");
+    invariant(band.edges.some((edge) => edge.target === errorNode.id), "Z0 is missing a relationship to signup-error-forward");
+  }
+  if (name === "Z0") {
+    const directSigninResults = Object.values(objects).filter((object) => object.kind === "result" && object.parentId === "signin");
+    for (const result of directSigninResults) {
+      invariant(band.nodes.some((node) => node.semanticId === result.id), `Z0 is missing ${result.id}`);
+    }
+  }
 }
 
 function descendsFrom(objects, object, ancestorId) {
