@@ -90,4 +90,3 @@ OpenSpec 变更 `openspec/changes/phase-1-semantic-flow-poc/` 是执行台账。
 `Ponytail Gate: passed (full)`。
 
 门禁删除了所有不能直接验证核心假设的基础设施。复用现有 React/Vite 试验环境、浏览器原生 SVG 与事件、Node 标准库校验、现有 CodeGraph 产物和当前 AI 代理；一期不新增图引擎、后端服务、数据库、AI SDK 或测试框架。
-

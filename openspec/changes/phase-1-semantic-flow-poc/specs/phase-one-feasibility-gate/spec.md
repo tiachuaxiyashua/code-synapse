@@ -27,4 +27,3 @@ A GO result SHALL authorize only the next narrow production validation: one addi
 #### Scenario: Phase receives GO
 - **WHEN** all truth, comprehension, and interaction gates pass
 - **THEN** the decision record names only the approved next validation and retains all other capabilities as deferred
-

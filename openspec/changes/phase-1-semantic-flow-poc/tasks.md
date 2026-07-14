@@ -1,7 +1,7 @@
 ## 0. M0 正式立项与基线
 
 - [x] 0.1 `T0.1` 初始化 Git、MIT 许可证、公开 README 和忽略规则，确认第三方样例、数据库、缓存、依赖和构建产物不入库
-- [ ] 0.2 `T0.2` 创建 GitHub public repository，推送基线并从 GitHub 核对可见性和默认分支
+- [x] 0.2 `T0.2` 创建 GitHub public repository，推送基线并从 GitHub 核对可见性和默认分支
 - [x] 0.3 `T0.3` 严格校验一期 OpenSpec，检查 `P1-*` 需求与 `docs/phase-1/` 的对应关系
 - [x] 0.4 `T0.4` 运行旧原型构建作为对照基线，并记录它不代表已批准产品行为
 

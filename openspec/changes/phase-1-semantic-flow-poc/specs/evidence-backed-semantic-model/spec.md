@@ -43,4 +43,3 @@ The semantic model MUST retain the sample's declared success and failure alterna
 #### Scenario: Missing critical truth
 - **WHEN** a required outcome or event is absent, or a data/event relationship has an empty label
 - **THEN** the validator rejects the model even if its generic schema is valid
-

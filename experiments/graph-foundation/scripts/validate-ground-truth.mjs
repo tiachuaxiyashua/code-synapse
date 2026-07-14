@@ -27,4 +27,3 @@ if (failures.length) {
 }
 
 process.stdout.write("All declared source locations contain the expected symbol or callee name.\n");
-

@@ -158,4 +158,3 @@ AI 可以提出 `label/purpose/why` 和父子归类，但不能创建没有 `evi
 ## 8. 安全与隐私
 
 一期不执行导入项目，不使用外部 AI API，不保存密钥。源码片段使用 React 文本节点或 `<pre>`，不使用 `dangerouslySetInnerHTML`。所有文件访问在离线脚本中限制到样例根目录。
-

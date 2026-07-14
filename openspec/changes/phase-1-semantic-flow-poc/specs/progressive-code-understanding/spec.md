@@ -45,4 +45,3 @@ The feature and flow views SHALL be independent URLs and SHALL synchronize stabl
 #### Scenario: Synchronize feature selection
 - **WHEN** the feature page broadcasts a known semantic ID
 - **THEN** the flow page selects the corresponding object or its visible ancestor while retaining its own camera
-
