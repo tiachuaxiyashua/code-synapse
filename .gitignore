@@ -27,4 +27,5 @@ experiments/graph-foundation/results/*/
 # Phase-one local inputs and generated artifacts
 experiments/semantic-zoom-feasibility/sample/
 experiments/semantic-zoom-feasibility/generated/
+experiments/semantic-zoom-feasibility/.tools/
 prototype/src/generated/

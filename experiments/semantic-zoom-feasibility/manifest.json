@@ -3,7 +3,7 @@
   "experiment": "phase-1-semantic-flow-poc",
   "sample": {
     "id": "bulletproof-nodejs-auth",
-    "repository": "https://github.com/santiq/bulletproof-nodejs.git",
+    "repository": "git@github.com:santiq/bulletproof-nodejs.git",
     "commit": "7ce1b4690c4e96659cb1ed0d367b08b3ab35a24b",
     "language": "typescript",
     "explanationLanguage": "zh-CN",
